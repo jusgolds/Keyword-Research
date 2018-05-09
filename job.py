@@ -13,7 +13,11 @@ cur.execute('CREATE TABLE Keywords (word TEXT, occurences INTEGER)')
 while True:
     # load data
     filename = input('Enter the file name: ')
-    file = open(os.path.join('descriptions',filename), 'r')
+    try:
+        file = open(os.path.join('descriptions',filename), 'r')
+    except:
+        print('File cannot be opened: ', filename)
+        break
     text = file.read()
     file.close()
     # split into words
