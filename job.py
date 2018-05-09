@@ -1,3 +1,14 @@
+import string
+import sqlite3
+from nltk import word_tokenize
+from nltk.corpus import stopwords
+
+# create table in db
+conn = sqlite3.connect('jobs.sqlite')
+cur = conn.cursor()
+cur.execute('DROP TABLE IF EXISTS Keywords')
+cur.execute('CREATE TABLE Keywords (word TEXT, occurences INTEGER)')
+
 while True:
     # load data
     filename = input('Enter the file name: ')
@@ -5,18 +16,15 @@ while True:
     text = file.read()
     file.close()
     # split into words
-    from nltk import word_tokenize
     tokens = word_tokenize(text)
     # convert  to lower case
     tokens = [w.lower() for w in tokens]
     # remove punctuation from each word
-    import string
     table = str.maketrans('', '', string.punctuation)
     stripped = [w.translate(table) for w in tokens]
     # remove all tokens that are not alphabetic
     words = [word for word in tokens if word.isalpha()]
     # filter out stop words
-    from nltk.corpus import stopwords
     stop_words = set(stopwords.words('english'))
     words = [w for w in words if not w in stop_words]
     # count words
@@ -27,12 +35,6 @@ while True:
         else:
             counts[word] += 1
     print(counts)
-    # create table in db
-    import sqlite3
-    conn = sqlite3.connect('jobs.sqlite')
-    cur = conn.cursor()
-    cur.execute('DROP TABLE IF EXISTS Keywords')
-    cur.execute('CREATE TABLE Keywords (word TEXT, occurences INTEGER)')
     # continue?
     end = input("Do you have another file (Y/N): ")
     if end == "N":
