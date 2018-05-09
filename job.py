@@ -1,3 +1,4 @@
+import os.path
 import string
 import sqlite3
 from nltk import word_tokenize
@@ -12,7 +13,7 @@ cur.execute('CREATE TABLE Keywords (word TEXT, occurences INTEGER)')
 while True:
     # load data
     filename = input('Enter the file name: ')
-    file = open(filename)
+    file = open(os.path.join('descriptions',filename), 'r')
     text = file.read()
     file.close()
     # split into words
