@@ -33,7 +33,6 @@ while True:
     cur = conn.cursor()
     cur.execute('DROP TABLE IF EXISTS Keywords')
     cur.execute('CREATE TABLE Keywords (word TEXT, occurences INTEGER)')
-    conn.close()
     # continue?
     end = input("Do you have another file (Y/N): ")
     if end == "N":
