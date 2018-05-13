@@ -17,4 +17,5 @@ venv.bak/
 *.sqlite
 
 # DB
+dbs/
 *.db

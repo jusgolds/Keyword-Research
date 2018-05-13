@@ -2,6 +2,7 @@ import os.path
 import sys
 import string
 import sqlite3
+import time
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -15,11 +16,12 @@ class Word(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(250), nullable=False)
     count = Column(Integer, nullable=False)
-engine = create_engine('sqlite:///job.db')
 
-# does db exist?
-if not os.path.exists('job.db'):
-    Base.metadata.create_all(engine)
+now = time.strftime("%Y%m%d-%H%M%S")
+db_path = os.path.join('dbs', 'job-{}.db'.format(now))
+engine = create_engine('sqlite:///{}'.format(db_path))
+
+Base.metadata.create_all(engine)
 
 Session = sessionmaker(bind=engine)
 session = Session()
