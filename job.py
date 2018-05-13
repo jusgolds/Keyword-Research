@@ -4,25 +4,25 @@ import string
 import sqlite3
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 from nltk import word_tokenize
 from nltk.corpus import stopwords
 
+Base = declarative_base()
+class Word(Base):
+    __tablename__ = 'word'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    count = Column(Integer, nullable=False)
+engine = create_engine('sqlite:///job.db')
+
 # does db exist?
 if not os.path.exists('job.db'):
-    # create db
-    Base = declarative_base()
-
-    class Word(Base):
-        __tablename__ = 'word'
-        id = Column(Integer, primary_key=True)
-        name = Column(String(250), nullable=False)
-
-    engine = create_engine('sqlite:///job.db')
-
     Base.metadata.create_all(engine)
 
+Session = sessionmaker(bind=engine)
+session = Session()
 
 # run script
 while True:
@@ -54,6 +54,10 @@ while True:
             counts[word] = 1
         else:
             counts[word] += 1
+    for word in counts:
+        db_word = Word(name=word, count=counts[word])
+        session.add(db_word)
+        session.commit()
     print(counts)
     # continue?
     end = input("Do you have another file (Y/N): ")
