@@ -13,5 +13,8 @@ venv.bak/
 # TXT
 *.txt
 
-#SQLite
+# SQLite
 *.sqlite
+
+# DB
+*.db
